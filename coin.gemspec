@@ -11,7 +11,8 @@ Gem::Specification.new do |spec|
   spec.email         = ["natehop@gmail.com"]
   spec.description   = "A simple in memory cache."
   spec.summary       = "Coin is a simple in memory cache."
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/hopsoft/coin"
+  spec.license       = "MIT"
 
   spec.files = FileList[
     'lib/**/*.rb',
