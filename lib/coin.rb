@@ -1,9 +1,11 @@
 require File.join(File.dirname(__FILE__), "coin", "version")
 require "singleton"
+require "thread"
 
 # A very simple in memory caching utility.
 class Coin
   include Singleton
+  attr_accessor :clean_threshold
 
   # Reads an item from the cache.
   # @return [Object] Returns the found object or nil.
@@ -14,7 +16,7 @@ class Coin
     if result
       expired = Time.now - result[:cached_at] > result[:lifetime]
       if expired
-        @dict.delete(key)
+        @mutex.synchronize { @dict.delete(key) }
       else
         return result[:value]
       end
@@ -28,7 +30,9 @@ class Coin
   # @param [Integer] lifetime The number of seconds to keep the key/value in the cache. Defaults to 90.
   # @return [Object] Returns the passed value.
   def write(key, value, lifetime=90)
-    @dict[key] = {:value => value, :cached_at => Time.now, :lifetime => lifetime}
+    @mutex.synchronize do
+      @dict[key] = {:value => value, :cached_at => Time.now, :lifetime => lifetime}
+    end
     value
   end
 
@@ -36,7 +40,9 @@ class Coin
   def clean
     now = Time.now
     @dict.each do |key, value|
-      @dict.delete(key) if now - value[:cached_at] > value[:lifetime]
+      if now - value[:cached_at] > value[:lifetime]
+        @mutex.synchronize { @dict.delete(key) }
+      end
     end
   end
 
@@ -49,8 +55,9 @@ class Coin
   private
 
   def initialize
+    @mutex = Mutex.new
     @dict = {}
-    @clean_threshold = 5000
+    @clean_threshold = 1000
     @read_count = 0
   end
 
