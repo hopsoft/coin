@@ -1,7 +1,18 @@
 #!/usr/bin/env ruby --
-
 require "drb/drb"
+require "tempfile"
 require File.join(File.dirname(__FILE__), "..", "lib", "coin")
+
+if File.exist?(Coin.pid_file)
+  begin
+    Process.kill("HUP", File.read(Coin.pid_file).to_i)
+  rescue Exception => ex
+  end
+end
+
+File.open(Coin.pid_file, "w") do |file|
+  file.write Process.pid
+end
 
 DRb.start_service ENV["COIN_URI"], Coin::Server.instance
 puts "Coin listening at: #{ENV["COIN_URI"]}"

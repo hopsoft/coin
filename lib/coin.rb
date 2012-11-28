@@ -64,18 +64,23 @@ module Coin
       @server
     end
 
+    def pid_file
+      "/tmp/coin-pid-63f95cb5-0bae-4f66-88ec-596dfbac9244"
+    end
+
     def start_server
       ruby = "#{RbConfig::CONFIG["bindir"]}/ruby"
       script = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin", "coin"))
       env = {
         "COIN_URI" => Coin.uri
       }
-      @pid = spawn(env, "#{ruby} #{script}")
-      Process.detach(@pid)
+      pid = spawn(env, "#{ruby} #{script}")
+      Process.detach(pid)
     end
 
     def stop_server
-      Process.kill("HUP", @pid) if @pid
+      Process.kill("HUP", File.read(Coin.pid_file).to_i) if File.exist?(Coin.pid_file)
     end
+
   end
 end
