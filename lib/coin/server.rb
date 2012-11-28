@@ -1,19 +1,23 @@
 require "thread"
 require "singleton"
+require "forwardable"
 
 module Coin
   class Server
+    extend Forwardable
     include Singleton
+    def_delegators :@dict, :length
 
     def read(key)
       value = @dict[key]
+      value = nil if value_expired?(value)
       return value[:value] if value
       nil
     end
 
     def write(key, value, lifetime=90)
       @mutex.synchronize do
-        @dict[key] = {:value => value, :cached_at => Time.now, :lifetime => lifetime}
+        @dict[key] = { :value => value, :cached_at => Time.now, :lifetime => lifetime }
       end
       value
     end
@@ -30,7 +34,7 @@ module Coin
       true
     end
 
-    private
+    protected
 
     def initialize
       @mutex = Mutex.new
@@ -41,7 +45,7 @@ module Coin
     def start_sweeper
       Thread.new do
         while true
-          sleep 1
+          sleep 60
           sweep
         end
       end
@@ -50,8 +54,12 @@ module Coin
     def sweep
       now = Time.now
       @dict.each do |key, value|
-        delete(key) if now - value[:cached_at] > value[:lifetime]
+        delete(key) if value_expired?(value)
       end
+    end
+
+    def value_expired?(value)
+      Time.now - value[:cached_at] > value[:lifetime]
     end
 
   end

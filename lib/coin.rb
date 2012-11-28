@@ -9,7 +9,7 @@ end
 module Coin
   class << self
     extend Forwardable
-    def_delegators :server, :write, :delete, :clear
+    def_delegators :server, :write, :delete, :clear, :length
 
     def read(key, lifetime=90)
       value = server.read(key)
@@ -32,21 +32,28 @@ module Coin
 
     def server
       return nil unless ENV["COIN_URI"].nil?
-      begin
-        @server.ok? if @server
-      rescue Exception => ex
-        puts "FAIL! #{ex}"
-        @server = nil
-      end
-      return @server if @server
 
-      begin
-        @server = DRbObject.new_with_uri(uri)
-        @server.ok?
-      rescue Exception => ex
-        puts "FAIL! #{ex}"
-        @server = nil
+      if server_running?
+        if @server
+          begin
+            @server.ok? if @server
+          rescue DRb::DRbConnError => ex
+            puts "FAIL! #{ex}"
+            @server = nil
+          end
+        end
+
+        if @server.nil?
+          begin
+            @server = DRbObject.new_with_uri(uri)
+            @server.ok?
+          rescue DRb::DRbConnError => ex
+            puts "FAIL! #{ex}"
+            @server = nil
+          end
+        end
       end
+
       return @server if @server
 
       start_server
@@ -56,7 +63,7 @@ module Coin
           sleep 0.1
           @server = DRbObject.new_with_uri(uri)
           @server.ok?
-        rescue Exception => ex
+        rescue DRb::DRbConnError => ex
         end
       end
 
@@ -68,7 +75,24 @@ module Coin
       "/tmp/coin-pid-63f95cb5-0bae-4f66-88ec-596dfbac9244"
     end
 
-    def start_server
+    def pid
+      File.read(Coin.pid_file) if File.exist?(Coin.pid_file)
+    end
+
+    def server_running?
+      @pid = pid
+      return false unless @pid
+      begin
+        Process.kill(0, @pid.to_i)
+      rescue Errno::ESRCH => ex
+        return false
+      end
+      true
+    end
+
+    def start_server(force=nil)
+      return if server_running? && !force
+      stop_server if force
       ruby = "#{RbConfig::CONFIG["bindir"]}/ruby"
       script = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin", "coin"))
       env = {
@@ -79,7 +103,9 @@ module Coin
     end
 
     def stop_server
-      Process.kill("HUP", File.read(Coin.pid_file).to_i) if File.exist?(Coin.pid_file)
+      if server_running?
+        Process.kill("HUP", @pid.to_i)
+      end
     end
 
   end
