@@ -9,7 +9,16 @@ end
 module Coin
   class << self
     extend Forwardable
-    def_delegators :server, :read, :write, :delete, :clear
+    def_delegators :server, :write, :delete, :clear
+
+    def read(key, lifetime=90)
+      value = server.read(key)
+      if value.nil? && block_given?
+        value = yield
+        server.write(key, value, lifetime)
+      end
+      value
+    end
 
     attr_writer :port
     def port
