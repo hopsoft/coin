@@ -1,68 +1,72 @@
-require File.join(File.dirname(__FILE__), "coin", "version")
-require "singleton"
-require "thread"
+require "drb/drb"
+require "rbconfig"
+require "forwardable"
 
-# A very simple in memory caching utility.
-class Coin
-  include Singleton
-  attr_accessor :clean_threshold
+Dir[File.join(File.dirname(__FILE__), "coin", "*.rb")].each do |file|
+  require file
+end
 
-  # Reads an item from the cache.
-  # @return [Object] Returns the found object or nil.
-  def read(key)
-    @read_count += 1
-    result = @dict[key]
-    clean if should_clean?
-    if result
-      expired = Time.now - result[:cached_at] > result[:lifetime]
-      if expired
-        @mutex.synchronize { @dict.delete(key) }
-      else
-        return result[:value]
+module Coin
+  class << self
+    extend Forwardable
+    def_delegators :server, :read, :write, :delete, :clear
+
+    attr_writer :port
+    def port
+      @port ||= 8955
+    end
+
+    attr_writer :uri
+    def uri
+      "druby://localhost:#{port}"
+    end
+
+    def server
+      return nil unless ENV["COIN_URI"].nil?
+      begin
+        @server.ok? if @server
+      rescue Exception => ex
+        puts "FAIL! #{ex}"
+        @server = nil
       end
-    end
-    nil
-  end
+      return @server if @server
 
-  # Writes an item to the cache.
-  # @param [Object] key The cache key to use.
-  # @param [Object] value The value to cache.
-  # @param [Integer] lifetime The number of seconds to keep the key/value in the cache. Defaults to 90.
-  # @return [Object] Returns the passed value.
-  def write(key, value, lifetime=90)
-    @mutex.synchronize do
-      @dict[key] = {:value => value, :cached_at => Time.now, :lifetime => lifetime}
-    end
-    value
-  end
-
-  # Removes expired items.
-  def clean
-    now = Time.now
-    @dict.each do |key, value|
-      if now - value[:cached_at] > value[:lifetime]
-        @mutex.synchronize { @dict.delete(key) }
+      begin
+        @server = DRbObject.new_with_uri(uri)
+        @server.ok?
+      rescue Exception => ex
+        puts "FAIL! #{ex}"
+        @server = nil
       end
+      return @server if @server
+
+      start_server
+
+      while @server.nil?
+        begin
+          sleep 0.1
+          @server = DRbObject.new_with_uri(uri)
+          @server.ok?
+        rescue Exception => ex
+        end
+      end
+
+      DRb.start_service
+      @server
+    end
+
+    def start_server
+      ruby = "#{RbConfig::CONFIG["bindir"]}/ruby"
+      script = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin", "coin"))
+      env = {
+        "COIN_URI" => Coin.uri
+      }
+      @pid = spawn(env, "#{ruby} #{script}")
+      Process.detach(@pid)
+    end
+
+    def stop_server
+      Process.kill("HUP", @pid) if @pid
     end
   end
-
-  # Clears the cache.
-  def clear
-    @dict = {}
-    @read_count = 0
-  end
-
-  private
-
-  def initialize
-    @mutex = Mutex.new
-    @dict = {}
-    @clean_threshold = 1000
-    @read_count = 0
-  end
-
-  def should_clean?
-    @read_count % @clean_threshold == 0
-  end
-
 end

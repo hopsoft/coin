@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby --
+
+require "drb/drb"
+require File.join(File.dirname(__FILE__), "..", "lib", "coin")
+
+DRb.start_service ENV["COIN_URI"], Coin::Server.instance
+puts "Coin listening at: #{ENV["COIN_URI"]}"
+DRb.thread.join
