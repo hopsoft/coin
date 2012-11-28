@@ -14,6 +14,6 @@ File.open(Coin.pid_file, "w") do |file|
   file.write Process.pid
 end
 
-DRb.start_service ENV["COIN_URI"], Coin::Server.instance
+DRb.start_service ENV["COIN_URI"], Coin::Store.instance
 puts "Coin listening at: #{ENV["COIN_URI"]}"
 DRb.thread.join

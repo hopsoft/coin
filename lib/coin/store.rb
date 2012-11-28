@@ -3,7 +3,7 @@ require "singleton"
 require "forwardable"
 
 module Coin
-  class Server
+  class Store
     extend Forwardable
     include Singleton
     def_delegators :@dict, :length

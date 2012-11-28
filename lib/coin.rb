@@ -103,9 +103,7 @@ module Coin
     end
 
     def stop_server
-      if server_running?
-        Process.kill("HUP", @pid.to_i)
-      end
+      Process.kill("HUP", @pid.to_i) if server_running?
     end
 
   end
