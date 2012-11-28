@@ -40,8 +40,10 @@ module Coin
 
     def start_sweeper
       Thread.new do
-        sleep 60
-        sweep
+        while true
+          sleep 1
+          sweep
+        end
       end
     end
 
