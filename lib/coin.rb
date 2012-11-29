@@ -9,7 +9,7 @@ end
 module Coin
   class << self
     extend Forwardable
-    def_delegators :server, :read_and_delete, :delete, :clear, :length
+    def_delegators :server, :write, :read_and_delete, :delete, :clear, :length
 
     def read(key, lifetime=300)
       value = server.read(key)
@@ -18,22 +18,6 @@ module Coin
         write(key, value, lifetime)
       end
       value
-    end
-
-    def write(key, value, lifetime=300)
-      @write_queue ||= Queue.new
-      @write_thread ||= Thread.new do
-        Thread.current.priority = -1
-        loop do
-          unless @write_queue.empty?
-            info = @write_queue.pop
-            server.write(info[0], info[1], info[2])
-          end
-          sleep 0.5
-        end
-      end
-
-      @write_queue << [key, value, lifetime]
     end
 
     attr_writer :port
