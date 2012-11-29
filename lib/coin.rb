@@ -9,15 +9,31 @@ end
 module Coin
   class << self
     extend Forwardable
-    def_delegators :server, :write, :delete, :clear, :length
+    def_delegators :server, :delete, :clear, :length
 
-    def read(key, lifetime=90)
+    def read(key, lifetime=300)
       value = server.read(key)
       if value.nil? && block_given?
         value = yield
-        server.write(key, value, lifetime)
+        write(key, value, lifetime)
       end
       value
+    end
+
+    def write(key, value, lifetime=300)
+      @write_queue ||= Queue.new
+      @write_thread ||= Thread.new do
+        Thread.current.priority = -1
+        loop do
+          unless @write_queue.empty?
+            info = @write_queue.pop
+            server.write(info[0], info[1], info[2])
+          end
+          sleep 0.5
+        end
+      end
+
+      @write_queue << [key, value, lifetime]
     end
 
     attr_writer :port
@@ -100,10 +116,15 @@ module Coin
       }
       pid = spawn(env, "#{ruby} #{script}")
       Process.detach(pid)
+
+      sleep 0.1 while !server_running?
+      true
     end
 
     def stop_server
       Process.kill("HUP", @pid.to_i) if server_running?
+      sleep 0.1 while server_running?
+      true
     end
 
   end

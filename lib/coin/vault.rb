@@ -3,19 +3,19 @@ require "singleton"
 require "forwardable"
 
 module Coin
-  class Store
+  class Vault
     extend Forwardable
     include Singleton
     def_delegators :@dict, :length
 
     def read(key)
       value = @dict[key]
-      value = nil if value_expired?(value)
+      value = nil if value && value_expired?(value)
       return value[:value] if value
       nil
     end
 
-    def write(key, value, lifetime=90)
+    def write(key, value, lifetime=300)
       @mutex.synchronize do
         @dict[key] = { :value => value, :cached_at => Time.now, :lifetime => lifetime }
       end
@@ -44,7 +44,7 @@ module Coin
 
     def start_sweeper
       Thread.new do
-        while true
+        loop do
           sleep 60
           sweep
         end
