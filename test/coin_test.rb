@@ -37,6 +37,14 @@ class CoinTest < MicroTest::Test
     assert Coin.read(@key) == value
   end
 
+  test "read and delete" do
+    value = rand(99999999999)
+    Coin.write @key, value
+    val = Coin.read_and_delete(@key)
+    assert val == value
+    assert Coin.read(@key).nil?
+  end
+
   test "write with expiration" do
     Coin.write(@key, true, 1)
     assert Coin.read(@key)

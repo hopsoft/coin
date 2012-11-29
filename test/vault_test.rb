@@ -26,4 +26,18 @@ class VaultTest < MicroTest::Test
     assert val == value
   end
 
+  test "delete" do
+    @vault.write(@key, true)
+    assert @vault.read(@key)
+    @vault.delete(@key)
+    assert @vault.read(@key).nil?
+  end
+
+  test "clear" do
+    10.times { |i| @vault.write("key#{i}", true) }
+    assert @vault.length >= 10
+    @vault.clear
+    assert @vault.length == 0
+  end
+
 end
