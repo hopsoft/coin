@@ -14,6 +14,7 @@ if File.exist?(Coin.pid_file)
   rescue Exception => ex
   end
 end
+
 File.open(Coin.pid_file, "w") do |file|
   file.write Process.pid
 end

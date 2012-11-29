@@ -54,7 +54,6 @@ module Coin
           begin
             @server.ok? if @server
           rescue DRb::DRbConnError => ex
-            puts "FAIL! #{ex}"
             @server = nil
           end
         end
@@ -64,27 +63,16 @@ module Coin
             @server = DRbObject.new_with_uri(uri)
             @server.ok?
           rescue DRb::DRbConnError => ex
-            puts "FAIL! #{ex}"
             @server = nil
           end
         end
       end
 
-      return @server if @server
+      return @server if @server && server_running?
 
       start_server
-
-      while @server.nil?
-        begin
-          sleep 0.1
-          @server = DRbObject.new_with_uri(uri)
-          @server.ok?
-        rescue DRb::DRbConnError => ex
-        end
-      end
-
       DRb.start_service
-      @server
+      @server = DRbObject.new_with_uri(uri)
     end
 
     def pid_file
