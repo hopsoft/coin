@@ -9,7 +9,7 @@ end
 module Coin
   class << self
     extend Forwardable
-    def_delegators :server, :delete, :clear, :length
+    def_delegators :server, :read_and_delete, :delete, :clear, :length
 
     def read(key, lifetime=300)
       value = server.read(key)

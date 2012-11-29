@@ -36,7 +36,7 @@ module Coin
     end
 
     def clear
-      @dict = {}
+      @mutex.synchronize { @dict = {} }
     end
 
     def ok?
