@@ -15,6 +15,15 @@ module Coin
       nil
     end
 
+    def read_and_delete(key)
+      value = nil
+      @mutex.synchronize do
+        value = read(key)
+        @dict.delete(key)
+      end
+      value
+    end
+
     def write(key, value, lifetime=300)
       @mutex.synchronize do
         @dict[key] = { :value => value, :cached_at => Time.now, :lifetime => lifetime }
