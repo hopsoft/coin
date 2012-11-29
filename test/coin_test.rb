@@ -44,11 +44,23 @@ class CoinTest < MicroTest::Test
     assert Coin.read(@key).nil?
   end
 
+  test "delete" do
+    Coin.write(@key, true)
+    assert Coin.read(@key)
+    Coin.delete(@key)
+    assert Coin.read(@key).nil?
+  end
+
   test "length" do
+    10.times { |i| Coin.write("key#{i}", rand(9999)) }
+    assert Coin.length >= 10
+  end
+
+  test "clear" do
+    10.times { |i| Coin.write("key#{i}", rand(9999)) }
+    assert Coin.length >= 10
     Coin.clear
     assert Coin.length == 0
-    10.times { |i| Coin.write("key#{i}", rand(9999)) }
-    assert Coin.length == 10
   end
 
 end
