@@ -20,5 +20,5 @@ File.open(Coin.pid_file, "w") do |file|
 end
 
 DRb.start_service ENV["COIN_URI"], Coin::Vault.instance
-puts "Coin listening at: #{ENV["COIN_URI"]}"
+puts "Coin::Vault listening at: #{ENV["COIN_URI"]}"
 DRb.thread.join
