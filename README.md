@@ -50,14 +50,14 @@ Coin.write :bar, true, 5
 sleep 5
 Coin.read :bar # => nil
 
+# delete an entry
+Coin.write :bar, true
+Coin.delete :bar
+Coin.read :bar # => nil
+
 # read and delete in a single step
 Coin.write :bar, true
 Coin.read_and_delete :bar # => true
-Coin.read :bar # => nil
-
-# delete a key
-Coin.write :bar, true
-Coin.delete :bar
 Coin.read :bar # => nil
 
 # determine how many items are in the cache
@@ -70,3 +70,37 @@ Coin.length # => 10
 Coin.clear
 Coin.length # => 0
 ```
+
+## Deep Cuts
+
+Coin automatically starts a DRb server that hosts the Coin::Vault.
+You can take control of this behavior if needed.
+
+```ruby
+require "coin"
+
+# configure the port that the DRb server runs on (default is 8955)
+Coin.port = 8080
+
+# configure the URI that the DRb server runs on (defaults to druby://localhost:PORT)
+Coin.uri = "druby://10.0.0.100:8080"
+
+# access the DRb server exposing Coin::Vault
+Coin.server # => #<Coin::Vault:0x007fe182852e18>
+
+# determine if the server is running
+Coin.server_running? # => true
+
+# determine the pid of the server process
+Coin.pid # => "63299"
+
+# stop the server
+Coin.stop_server # => true
+
+# start the server
+Coin.start_server # => true
+
+# start the server forcing a restart if the server is already running
+Coin.start_server true # => true
+```
+
