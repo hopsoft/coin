@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
   spec.files = FileList[
     'lib/**/*.rb',
     'test/**/*.rb',
+    'bin/*',
     'Gemfile',
     'Gemfile.lock',
     'LICENSE.txt',
