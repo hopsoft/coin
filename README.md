@@ -1,29 +1,32 @@
 # Coin
 
-TODO: Write a gem description
+## Memcached? We don't need no stinking Memcached.
 
-## Installation
+... Well, you might depending upon your specific needs.
+But be sure to have a look at Coin before you reach for the sledgehammer.
 
-Add this line to your application's Gemfile:
+Coin is an absurdly simple in memory object caching system written in Ruby.
 
-    gem 'coin'
+## Why Coin?
 
-And then execute:
+* No configuration required
+* No added complexity to your stack
+* Small footprint (under 200 lines)
+* Simple API
 
-    $ bundle
+Coin uses [Distributed Ruby (DRb)](http://pragprog.com/book/sidruby/the-druby-book)
+to create a simple in memory caching server that fills many of the same needs as Memcached
+and other similar solutions.
 
-Or install it yourself as:
+## Quick Start
 
-    $ gem install coin
+```bash
+$ gem install coin
+```
 
-## Usage
+```ruby
+require "coin"
 
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+Coin.write :foo, true
+Coin.read :foo # => true
+```
