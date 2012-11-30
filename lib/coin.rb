@@ -55,7 +55,6 @@ module Coin
       return @server if @server && server_running?
 
       start_server
-      DRb.start_service
       @server = DRbObject.new_with_uri(uri)
     end
 
@@ -90,12 +89,14 @@ module Coin
       Process.detach(pid)
 
       sleep 0.1 while !server_running?
+      DRb.start_service
       true
     end
 
     def stop_server
       Process.kill("HUP", @pid.to_i) if server_running?
       sleep 0.1 while server_running?
+      DRb.stop_service
       true
     end
 
