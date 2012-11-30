@@ -139,5 +139,3 @@ shared access across all processes on a **single machine**.
 
 _It should be relatively simple to update Coin to work across multiple machines,
 so keep an eye peeled for this feature in the future._
-
-![Coin Processes](https://www.lucidchart.com/publicSegments/view/50b8299a-7c5c-4175-8121-6b190a7a0a70/image.png)
