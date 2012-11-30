@@ -9,8 +9,7 @@ Gem::Specification.new do |spec|
   spec.version       = Coin::VERSION
   spec.authors       = ["Nathan Hopkins"]
   spec.email         = ["natehop@gmail.com"]
-  spec.description   = "A simple in memory cache."
-  spec.summary       = "Coin is a simple in memory cache."
+  spec.summary       = "An absurdly simple in memory object caching system."
   spec.homepage      = "https://github.com/hopsoft/coin"
   spec.license       = "MIT"
 
