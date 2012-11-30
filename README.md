@@ -108,7 +108,7 @@ Coin.start_server true # => true
 
 All objects stored with Coin must be able to marshal.
 
-Its generally a good idea to stick to storing only the most basic objects.
+Its generally a good idea to store only the most basic objects.
 For example:
 
 * Boolean
