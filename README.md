@@ -104,3 +104,20 @@ Coin.start_server # => true
 Coin.start_server true # => true
 ```
 
+## Notes
+
+Coin's default behavior launches a single DRb server that provides
+shared access across all processes on a single machine.
+
+It should be relatively simple to update Coin to work across multiple machines,
+so keep an eye peeled for this feature in the future.
+
+## Run the Tests
+
+```bash
+$ gem install coin
+$ gem unpack coin
+$ cd coin-VERSION
+$ bundle
+$ mt
+```
