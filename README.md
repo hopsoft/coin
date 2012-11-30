@@ -104,6 +104,24 @@ Coin.start_server # => true
 Coin.start_server true # => true
 ```
 
+## Best Practices
+
+All objects stored with Coin must be able to marshal.
+
+Its generally a good idea to stick to storing only the most basic objects.
+For example:
+
+* Boolean
+* String
+* Number
+
+Its possible to store more complex objects such as:
+
+* Array
+* Hash
+
+Just be sure to limit the keys & values to basic types.
+
 ## Run the Tests
 
 ```bash
