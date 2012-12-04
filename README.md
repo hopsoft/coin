@@ -1,6 +1,6 @@
 # Coin
 
-## Memcached? We don't need no stinking Memcached.
+## Memcached? We don't need no stinking Memcached. <sup><a href="#cultural_references">1</a></sup>
 
 ... Well, you might depending upon your specific needs.
 But be sure to have a look at Coin before you reach for the sledgehammer.
@@ -139,3 +139,7 @@ shared access across all processes on a **single machine**.
 
 _It should be relatively simple to update Coin to work across multiple machines,
 so keep an eye peeled for this feature in the future._
+
+## Cultural References
+
+1. "Badges? We don't need no stinking badges!" - from Mel Brooks' film [Blazing Saddles](http://en.wikipedia.org/wiki/Stinking_badges)
