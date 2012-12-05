@@ -1,11 +1,13 @@
 require "thread"
 require "singleton"
 require "forwardable"
+require "monitor"
 
 module Coin
   class Vault
     extend Forwardable
     include Singleton
+    include MonitorMixin
     def_delegators :@dict, :length
 
     def read(key)
@@ -17,7 +19,7 @@ module Coin
 
     def read_and_delete(key)
       value = nil
-      @mutex.synchronize do
+      synchronize do
         value = read(key)
         @dict.delete(key)
       end
@@ -25,18 +27,18 @@ module Coin
     end
 
     def write(key, value, lifetime=300)
-      @mutex.synchronize do
+      synchronize do
         @dict[key] = { :value => value, :cached_at => Time.now, :lifetime => lifetime }
       end
       value
     end
 
     def delete(key)
-      @mutex.synchronize { @dict.delete(key) }
+      synchronize { @dict.delete(key) }
     end
 
     def clear
-      @mutex.synchronize { @dict = {} }
+      synchronize { @dict = {} }
     end
 
     def ok?
@@ -46,9 +48,11 @@ module Coin
     protected
 
     def initialize
-      @mutex = Mutex.new
       @dict = {}
       start_sweeper
+      # have to directly call mon_initialize since this is a
+      # singleton class and constructor is protected
+      mon_initialize
     end
 
     def start_sweeper
