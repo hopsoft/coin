@@ -48,11 +48,10 @@ module Coin
     protected
 
     def initialize
+      super
       @dict = {}
       start_sweeper
-      # have to directly call mon_initialize since this is a
-      # singleton class and constructor is protected
-      mon_initialize
+      self
     end
 
     def start_sweeper
