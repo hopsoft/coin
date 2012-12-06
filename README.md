@@ -2,7 +2,7 @@
 
 ## Memcached? We don't need no stinking Memcached. <sup><a href="#cultural-references">1</a></sup>
 
-Well... you might depending upon your specific needs.,
+Well... you might depending upon your specific needs,
 but have a look at Coin before you reach for the sledgehammer.
 
 Coin is an absurdly simple in memory object caching system written in Ruby.

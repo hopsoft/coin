@@ -10,6 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Nathan Hopkins"]
   spec.email         = ["natehop@gmail.com"]
   spec.summary       = "An absurdly simple in memory object caching system."
+  spec.description   = ""
   spec.homepage      = "https://github.com/hopsoft/coin"
   spec.license       = "MIT"
 
