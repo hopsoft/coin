@@ -111,6 +111,10 @@ Allowing a single Coin server to service multiple machines.
 Coin.remote_uri = "druby://192.168.0.12:8808"
 ```
 
+Want interoperability with other languages? Check out
+[CoinRack](https://github.com/hopsoft/coin_rack) which provides 
+a REST API on top of Coin.
+
 ## Best Practices
 
 All objects stored with Coin must be able to marshal.
