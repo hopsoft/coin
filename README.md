@@ -108,7 +108,7 @@ Coin also supports configuring a remote server.
 Allowing a single Coin server to service multiple machines.
 
 ```ruby
-Coin.remote_uri = 'druby://192.168.0.12:8808'
+Coin.remote_uri = "druby://192.168.0.12:8808"
 ```
 
 ## Best Practices
