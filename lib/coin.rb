@@ -25,16 +25,18 @@ module Coin
       @port ||= 8955
     end
 
+    attr_writer :uri
     def uri
       @uri ||= "druby://localhost:#{port}"
     end
 
-    def uri=(value)
-      @remote = true
-      @uri = value
+    attr_reader :remote_uri
+    def remote_uri=(value)
+      @remote_uri = value
     end
 
     def server
+      return remote_server if remote_uri
       return nil unless ENV["COIN_URI"].nil?
 
       if server_running?
@@ -62,6 +64,11 @@ module Coin
       @server = DRbObject.new_with_uri(uri)
     end
 
+    def remote_server
+      DRb.start_service
+      @server = DRbObject.new_with_uri(remote_uri)
+    end
+
     def pid_file
       "/tmp/coin-pid-63f95cb5-0bae-4f66-88ec-596dfbac9244"
     end
@@ -71,7 +78,6 @@ module Coin
     end
 
     def server_running?
-      return false if @remote
       @pid = pid
       return false unless @pid
       begin
@@ -83,8 +89,6 @@ module Coin
     end
 
     def start_server(force=nil)
-      DRb.start_service
-      return if @remote
       return if server_running? && !force
       stop_server if force
       ruby = "#{RbConfig::CONFIG["bindir"]}/ruby"
@@ -96,6 +100,7 @@ module Coin
       Process.detach(pid)
 
       sleep 0.1 while !server_running?
+      DRb.start_service
       true
     end
 
