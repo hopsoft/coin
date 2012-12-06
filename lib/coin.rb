@@ -71,6 +71,7 @@ module Coin
     end
 
     def server_running?
+      return false if @remote
       @pid = pid
       return false unless @pid
       begin
