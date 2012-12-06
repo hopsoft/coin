@@ -25,9 +25,13 @@ module Coin
       @port ||= 8955
     end
 
-    attr_writer :uri
     def uri
-      "druby://localhost:#{port}"
+      @uri ||= "druby://localhost:#{port}"
+    end
+
+    def uri=(value)
+      @remote = true
+      @uri = value
     end
 
     def server
@@ -78,6 +82,8 @@ module Coin
     end
 
     def start_server(force=nil)
+      DRb.start_service
+      return if @remote
       return if server_running? && !force
       stop_server if force
       ruby = "#{RbConfig::CONFIG["bindir"]}/ruby"
@@ -89,7 +95,6 @@ module Coin
       Process.detach(pid)
 
       sleep 0.1 while !server_running?
-      DRb.start_service
       true
     end
 
