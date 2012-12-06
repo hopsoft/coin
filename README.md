@@ -143,6 +143,10 @@ $ mt
 
 Coin's default behavior launches a single DRb server that provides
 shared access across all processes on a **single machine**.
+You need to configure `Coin.remote_uri` if you want Coin to connect to a
+DRb server on another machine.
+
+![Coin Diagram](https://raw.github.com/hopsoft/coin/gh-pages/assets/images/coin.png)
 
 ## Cultural References
 
