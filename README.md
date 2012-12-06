@@ -104,6 +104,13 @@ Coin.start_server # => true
 Coin.start_server true # => true
 ```
 
+Coin also supports configuring a remote server. 
+Allowing a single Coin server to service multiple machines.
+
+```ruby
+Coin.remote_uri = 'druby://192.168.0.12:8808'
+```
+
 ## Best Practices
 
 All objects stored with Coin must be able to marshal.
@@ -136,10 +143,6 @@ $ mt
 
 Coin's default behavior launches a single DRb server that provides
 shared access across all processes on a **single machine**.
-
-_It should be relatively simple to update Coin to work across multiple machines,
-so keep an eye peeled for this feature in the future._
-
 
 ## Cultural References
 
