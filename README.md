@@ -1,5 +1,7 @@
 # Coin
 
+[![Build Status](https://travis-ci.org/hopsoft/coin.png)](https://travis-ci.org/hopsoft/coin)
+[![Dependency Status](https://gemnasium.com/hopsoft/coin.png)](https://gemnasium.com/hopsoft/coin)
 [![Code Climate](https://codeclimate.com/github/hopsoft/coin.png)](https://codeclimate.com/github/hopsoft/coin)
 
 ## Memcached? We don't need no stinking Memcached. <sup><a href="#cultural-references">1</a></sup>
