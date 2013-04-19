@@ -1,5 +1,7 @@
 # Coin
 
+[![Code Climate](https://codeclimate.com/github/hopsoft/coin.png)](https://codeclimate.com/github/hopsoft/coin)
+
 ## Memcached? We don't need no stinking Memcached. <sup><a href="#cultural-references">1</a></sup>
 
 Well... you might depending upon your specific needs,

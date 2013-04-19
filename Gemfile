@@ -1,7 +1,3 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
+gemspec
 
-group :development do
-  gem "micro_test"
-  gem "pry"
-  # gem "pry-stack_explorer"
-end
