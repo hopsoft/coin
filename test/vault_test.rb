@@ -26,6 +26,18 @@ class VaultTest < MicroTest::Test
     assert val == value
   end
 
+  test "read_and_write" do
+    orig_value = rand(999999999)
+    value = nil
+    @vault.write(@key, orig_value)
+    values = @vault.read_and_write(@key) do |val|
+      value = rand(888888888)
+    end
+    assert values.first == orig_value
+    assert values.last == value
+    assert @vault.read(@key) == value
+  end
+
   test "delete" do
     @vault.write(@key, true)
     assert @vault.read(@key)

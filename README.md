@@ -45,7 +45,7 @@ Examples of more advanced usage.
 ```ruby
 require "coin"
 
-# read and/or assign a default value in a single step
+# read and/or assign a default value in a single atomic step
 Coin.read(:bar) { true } # => true
 
 # write data with an explicit expiration (in seconds)
@@ -59,10 +59,17 @@ Coin.write :bar, true
 Coin.delete :bar
 Coin.read :bar # => nil
 
-# read and delete in a single step
+# read and delete in a single atomic step
 Coin.write :bar, true
 Coin.read_and_delete :bar # => true
 Coin.read :bar # => nil
+
+# read and update in a single atomic step
+Coin.write :bar, true
+Coin.read_and_update :bar do |value|
+  !value
+end
+Coin.read :bar # => false
 
 # determine how many items are in the cache
 10.times do |i|
@@ -108,7 +115,7 @@ Coin.start_server # => true
 Coin.start_server true # => true
 ```
 
-Coin also supports configuring a remote server. 
+Coin also supports configuring a remote server.
 Allowing a single Coin server to service multiple machines.
 
 ```ruby
@@ -116,7 +123,7 @@ Coin.remote_uri = "druby://192.168.0.12:8808"
 ```
 
 Want interoperability with other languages? Check out
-[CoinRack](https://github.com/hopsoft/coin_rack) which provides 
+[CoinRack](https://github.com/hopsoft/coin_rack) which provides
 a REST API on top of Coin.
 
 ## Best Practices

@@ -17,15 +17,6 @@ module Coin
       nil
     end
 
-    def read_and_delete(key)
-      value = nil
-      synchronize do
-        value = read(key)
-        @dict.delete(key)
-      end
-      value
-    end
-
     def write(key, value, lifetime=300)
       synchronize do
         @dict[key] = { :value => value, :cached_at => Time.now, :lifetime => lifetime }
@@ -35,6 +26,26 @@ module Coin
 
     def delete(key)
       synchronize { @dict.delete(key) }
+    end
+
+    def read_and_delete(key)
+      value = nil
+      synchronize do
+        value = read(key)
+        @dict.delete(key)
+      end
+      value
+    end
+
+    def read_and_write(key, lifetime=300)
+      orig_value = nil
+      value = nil
+      synchronize do
+        orig_value = read(key)
+        value = yield(orig_value)
+        write key, value, lifetime
+      end
+      [orig_value, value]
     end
 
     def clear
