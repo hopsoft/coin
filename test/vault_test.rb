@@ -1,7 +1,7 @@
-require File.join(File.dirname(__FILE__), "test_helper")
+require File.expand_path("../test_helper", __FILE__)
 require "securerandom"
 
-class VaultTest < MicroTest::Test
+class VaultTest < PryTest::Test
 
   before do
     @vault = Coin::Vault.instance

@@ -1,8 +1,11 @@
-# Coin
+[![Lines of Code](http://img.shields.io/badge/lines_of_code-435-brightgreen.svg?style=flat)](http://blog.codinghorror.com/the-best-code-is-no-code-at-all/)
+[![Code Status](http://img.shields.io/codeclimate/github/hopsoft/coin.svg?style=flat)](https://codeclimate.com/github/hopsoft/coin)
+[![Dependency Status](http://img.shields.io/gemnasium/hopsoft/coin.svg?style=flat)](https://gemnasium.com/hopsoft/coin)
+[![Build Status](http://img.shields.io/travis/hopsoft/coin.svg?style=flat)](https://travis-ci.org/hopsoft/coin)
+[![Coverage Status](https://img.shields.io/coveralls/hopsoft/coin.svg?style=flat)](https://coveralls.io/r/hopsoft/coin?branch=master)
+[![Downloads](http://img.shields.io/gem/dt/coin.svg?style=flat)](http://rubygems.org/gems/coin)
 
-[![Build Status](https://travis-ci.org/hopsoft/coin.png)](https://travis-ci.org/hopsoft/coin)
-[![Dependency Status](https://gemnasium.com/hopsoft/coin.png)](https://gemnasium.com/hopsoft/coin)
-[![Code Climate](https://codeclimate.com/github/hopsoft/coin.png)](https://codeclimate.com/github/hopsoft/coin)
+# Coin
 
 ## Memcached? We don't need no stinking Memcached. <sup><a href="#cultural-references">1</a></sup>
 

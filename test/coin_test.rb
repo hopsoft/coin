@@ -1,6 +1,6 @@
-require File.join(File.dirname(__FILE__), "test_helper")
+require File.expand_path("../test_helper", __FILE__)
 
-class CoinTest < MicroTest::Test
+class CoinTest < PryTest::Test
   before do
     @key = "key-#{SecureRandom.uuid}"
   end

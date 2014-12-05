@@ -1,4 +1,8 @@
-require 'rubygems'
-require 'bundler'
-Bundler.require :default, :development
-require File.join(File.dirname(__FILE__), "..", "lib", "coin")
+require "rubygems"
+require "pry-test"
+require "coveralls"
+
+Coveralls.wear!
+SimpleCov.command_name "pry-test"
+
+require File.expand_path("../../lib/coin", __FILE__)

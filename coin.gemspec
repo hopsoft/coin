@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.join(File.expand_path("../lib", __FILE__), "coin", "version")
+require File.expand_path("../lib/coin/version", __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name          = "coin"
@@ -16,6 +16,9 @@ Gem::Specification.new do |gem|
   gem.executables = "coin"
 
   gem.add_development_dependency "rake"
-  gem.add_development_dependency "micro_test"
   gem.add_development_dependency "pry"
+  gem.add_development_dependency "pry-test"
+  gem.add_development_dependency "coveralls"
+  #gem.add_development_dependency "pry-stack_explorer"
+  #gem.add_development_dependency "pry-rescue"
 end
