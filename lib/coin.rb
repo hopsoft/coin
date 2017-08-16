@@ -1,6 +1,5 @@
 require "drb/drb"
 require "rbconfig"
-require "forwardable"
 
 Dir[File.join(File.dirname(__FILE__), "coin", "*.rb")].each do |file|
   require file
@@ -8,9 +7,6 @@ end
 
 module Coin
   class << self
-    extend Forwardable
-    def_delegators :server, :write, :read_and_delete, :delete, :clear, :length
-
     def read(key, lifetime=300)
       value = server.read(key)
       if value.nil? && block_given?
@@ -18,6 +14,26 @@ module Coin
         write(key, value, lifetime)
       end
       value
+    end
+
+    def read_and_delete(key)
+      server.read_and_delete key
+    end
+
+    def write(key, value, lifetime=300)
+      server.write key, value, lifetime
+    end
+
+    def delete(key)
+      server.delete key
+    end
+
+    def length
+      server.length
+    end
+
+    def clear
+      server.clear
     end
 
     attr_writer :port

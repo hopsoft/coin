@@ -1,9 +1,11 @@
-[![Lines of Code](http://img.shields.io/badge/lines_of_code-194-brightgreen.svg?style=flat)](http://blog.codinghorror.com/the-best-code-is-no-code-at-all/)
+[![Lines of Code](http://img.shields.io/badge/lines_of_code-186-brightgreen.svg?style=flat)](http://blog.codinghorror.com/the-best-code-is-no-code-at-all/)
 [![Code Status](http://img.shields.io/codeclimate/github/hopsoft/coin.svg?style=flat)](https://codeclimate.com/github/hopsoft/coin)
 [![Dependency Status](http://img.shields.io/gemnasium/hopsoft/coin.svg?style=flat)](https://gemnasium.com/hopsoft/coin)
 [![Build Status](http://img.shields.io/travis/hopsoft/coin.svg?style=flat)](https://travis-ci.org/hopsoft/coin)
 [![Coverage Status](https://img.shields.io/coveralls/hopsoft/coin.svg?style=flat)](https://coveralls.io/r/hopsoft/coin?branch=master)
 [![Downloads](http://img.shields.io/gem/dt/coin.svg?style=flat)](http://rubygems.org/gems/coin)
+
+<a rel="nofollow" href="https://app.codesponsor.io/link/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/coin"><img src="https://app.codesponsor.io/embed/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/coin.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
 
 # Coin
 
